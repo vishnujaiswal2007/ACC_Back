@@ -4,7 +4,10 @@ import express from 'express'
 var app = express()
 import userRouters from './routes/userRouters.js'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 
+
+app.use(cookieParser())
 app.use(cors())
 
 // app.use(function (req, res, next) {

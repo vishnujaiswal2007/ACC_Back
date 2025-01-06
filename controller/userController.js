@@ -5,6 +5,8 @@ var URL = process.env.Data_URL;
 // import {createRequire} from 'module';
 // var require = createRequire(import.meta.url);
 
+import pkg from 'lodash'
+const { omit } = pkg;
 import {
     MongoClient
 } from 'mongodb'
@@ -41,6 +43,7 @@ class userController {
                             const salt = await bcrypt.genSalt(10)
                             myobj.password = await bcrypt.hash(myobj.password, salt)
                             myobj.repass = await bcrypt.hash(myobj.repass, salt)
+                            myobj = omit (req.body, ['repass'])
                             var result = await database.collection("users").insertOne(myobj);
 
                             var Insertid = JSON.stringify(result.insertedId)
@@ -104,7 +107,8 @@ class userController {
                     }, process.env.JWT_SECRET_KEY, {
                         expiresIn: '1d'
                     })
-                    // res.cookie('jwt', token)
+                    // res.cookie('token', token, { httpOnly: true, maxAge: 15000})
+                    // res.cookie('token', token)
                     // res.set('Authorization', 'Bearer '+ token);
                     res.status(200).send({
                         'status': 'sucess',
@@ -136,8 +140,8 @@ class userController {
     }
 
     static changepassword = async (req, res) => {
-        var htok = req.headers
-        console.log("token is ", htok)
+        // var htok = req.cookie
+        console.log("token is ", req.headers)
         res.status(200).send({
             'status': 'sucess',
             'message': 'All is well',
