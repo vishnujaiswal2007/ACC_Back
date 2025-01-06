@@ -105,14 +105,14 @@ class userController {
                     const token = jwt.sign({
                         userID: check._id
                     }, process.env.JWT_SECRET_KEY, {
-                        expiresIn: '1d'
+                        expiresIn: '15m'
                     })
                     // res.cookie('token', token, { httpOnly: true, maxAge: 15000})
                     // res.cookie('token', token)
                     // res.set('Authorization', 'Bearer '+ token);
                     res.status(200).send({
                         'status': 'sucess',
-                        'message': 'Swagat hai',
+                        // 'message': 'Swagat hai',
                         'token': token
                     })
 
@@ -141,7 +141,7 @@ class userController {
 
     static changepassword = async (req, res) => {
         // var htok = req.cookie
-        console.log("token is ", req.headers)
+        // console.log("token is ", req.headers)
         res.status(200).send({
             'status': 'sucess',
             'message': 'All is well',
