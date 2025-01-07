@@ -105,7 +105,7 @@ class userController {
                     const token = jwt.sign({
                         userID: check._id
                     }, process.env.JWT_SECRET_KEY, {
-                        expiresIn: '15m'
+                        expiresIn: '1d'
                     })
                     // res.cookie('token', token, { httpOnly: true, maxAge: 15000})
                     // res.cookie('token', token)
@@ -113,7 +113,10 @@ class userController {
                     res.status(200).send({
                         'status': 'sucess',
                         // 'message': 'Swagat hai',
-                        'token': token
+                        'token': token,
+                        'Username':check.f_name + ' ' + check.s_name + ' ' + check.l_name ,
+                        'Designation': check.prst_desig
+
                     })
 
                     //    return res.status(200).json({token:token}).send({
