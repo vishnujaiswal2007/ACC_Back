@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { MongoClient, ObjectId } from 'mongodb'
 import pkg from 'lodash'
-import { json } from 'express';
 const { omit } = pkg;
 
 
@@ -18,21 +17,27 @@ var checkUserAuth = async (req, res, next) => {
             //verify Token
             const userID = jwt.verify(token, process.env.JWT_SECRET_KEY)
             
-
+            // var ID= JSON.parse(userID)
 
             //get User from Token
             const client = new MongoClient(process.env.Data_URL)
             const database = client.db("SMS_login")
             const collection = database.collection('users');
 
-            const c_User = await collection.findOne({ _id: new ObjectId(userID) });
+       
+            // var c_User = await collection.find({ _id: new ObjectId(userID.userID)}).toArray(function(err, results) {
+            //     if (err){
+            //         console.log(err)
+            //     }else{
+            //         return results
+            //     }
+            //   });
+
+              var c_User = await collection.findOne({ _id: new ObjectId(userID.userID)})
 
 
-
-            // req.user = omit (c_User, ['password'])
-            // userID = JSON.parse(`ObjectId('` + userID +`')`)
-            console.log("userID", userID)
-            console.log("C_User", c_User)
+            req.user = omit (c_User, ['repass','password'])
+            // console.log("C_User", req.user)
             next()
         } catch (error) {
             console.log(error)

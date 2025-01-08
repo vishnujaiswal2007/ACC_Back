@@ -144,7 +144,7 @@ class userController {
 
     static changepassword = async (req, res) => {
         // var htok = req.cookie
-        // console.log("token is ", req.headers)
+        console.log("User Infor ", req.user)
         res.status(200).send({
             'status': 'sucess',
             'message': 'All is well',
