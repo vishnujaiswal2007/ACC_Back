@@ -20,7 +20,7 @@ class userController {
         var myobj = req.body
 
         // Create a new client and connect to MongoDB
-      
+
         const client = new MongoClient(URL);
         run();
         async function run() {
@@ -43,10 +43,10 @@ class userController {
                             const salt = await bcrypt.genSalt(10)
                             myobj.password = await bcrypt.hash(myobj.password, salt)
                             myobj.repass = await bcrypt.hash(myobj.repass, salt)
-                            myobj = omit (req.body, ['repass'])
+                            myobj = omit(req.body, ['repass'])
                             var result = await database.collection("users").insertOne(myobj);
 
-                            var Insertid = JSON.stringify(result.insertedId)
+                            // var Insertid = JSON.stringify(result.insertedId)
                             var verify = JSON.stringify(result.acknowledged)
 
                             if (verify == "true") {
@@ -114,7 +114,7 @@ class userController {
                         'status': 'sucess',
                         // 'message': 'Swagat hai',
                         'token': token,
-                        'Username':check.f_name + ' ' + check.s_name + ' ' + check.l_name ,
+                        'Username': check.f_name + ' ' + check.s_name + ' ' + check.l_name,
                         'Designation': check.prst_desig
 
                     })
@@ -143,13 +143,40 @@ class userController {
     }
 
     static changepassword = async (req, res) => {
-        // var htok = req.cookie
-        console.log("User Infor ", req.user)
+        // console.log("User Infor ", req.user)
         res.status(200).send({
-            'status': 'sucess',
-            'message': 'All is well',
+            'status': 'sucess'
         })
     }
+
+
+
+
+    static updpas = async (req, res) => {
+
+        // res.status(200).send({
+        //     'status': 'sucess',
+        //     'message': 'Swagat hai'
+        // })
+
+            const client = new MongoClient(URL)
+            const database = client.db("SMS_login")
+
+            const salt = await bcrypt.genSalt(10)
+            var isMatch = await bcrypt.compare(req.body.Old_password, req.user.password)
+            if (isMatch) {
+                var myobj = req.body
+                if (req.body.N_password === req.body.CN_password) {
+                    myobj.N_password = await bcrypt.hash(myobj.N_password, salt)
+                    var ack = await database.collection('users').updateOne({ _id: req.user._id }, { $set: { password: myobj.N_password } })
+                }
+            }
+
+                    
+
+    }
+
+
 
     static getdetails = async (req, res) => {
         console.log(req.body);
@@ -160,15 +187,16 @@ class userController {
     }
 
     static getcourse = async (req, res) => {
-            const client = new MongoClient(URL)
-            const database = client.db("COURSES")
-           var check = await database.collection('TRY').find({}).toArray(function(err,result){
-                if (err) throw err;
-                    return result
-            })
-            res.status(200).send({
-                'status':'sucess',
-                check})
+        const client = new MongoClient(URL)
+        const database = client.db("COURSES")
+        var check = await database.collection('TRY').find({}).toArray(function (err, result) {
+            if (err) throw err;
+            return result
+        })
+        res.status(200).send({
+            'status': 'sucess',
+            check
+        })
 
     }
 

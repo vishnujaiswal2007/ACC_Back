@@ -1,9 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { MongoClient, ObjectId } from 'mongodb'
-import pkg from 'lodash'
-const { omit } = pkg;
-
-
+// import pkg from 'lodash'
+// const { omit } = pkg;
 
 
 var checkUserAuth = async (req, res, next) => {
@@ -33,10 +31,9 @@ var checkUserAuth = async (req, res, next) => {
             //     }
             //   });
 
-              var c_User = await collection.findOne({ _id: new ObjectId(userID.userID)})
+              req.user = await collection.findOne({ _id: new ObjectId(userID.userID)})
 
-
-            req.user = omit (c_User, ['repass','password'])
+            // req.user = omit (c_User, ['repass', 'password'])
             // console.log("C_User", req.user)
             next()
         } catch (error) {
